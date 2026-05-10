@@ -13,6 +13,10 @@
   <a href="https://freellm.net/free-llm-api-keys/">API keys</a>
 </p>
 
+<!-- AUTO_UPDATE_BADGE -->
+<p align="center"><strong>🔄 Data refreshed daily from <a href="https://freellm.net">freellm.net</a></strong> — Last updated: 2026-05-11</p>
+<!-- END_AUTO_UPDATE_BADGE -->
+
 ---
 
 ## Why This Exists
@@ -198,7 +202,7 @@ MIT © [open-free-llm-api](https://github.com/open-free-llm-api)
 ---
 
 <p align="center">
-  <sub>Data refreshed daily via automated monitoring. <!-- AUTO_LAST_UPDATED -->
-Last updated: 2026-05-11
-<!-- END_AUTO_LAST_UPDATED -->.</sub>
+  <sub>Last updated: <!-- AUTO_LAST_UPDATED -->
+2026-05-11
+<!-- END_AUTO_LAST_UPDATED --></sub>
 </p>
