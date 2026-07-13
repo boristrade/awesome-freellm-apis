@@ -96,11 +96,15 @@ Settings → Models → Add Model
 ### Claude Code
 
 ```bash
-# Claude Code needs an Anthropic-compatible API — use OpenRouter
+# Claude Code works via OpenRouter's Anthropic-compatible API
+# Only paid Anthropic Claude models work here — browse: openrouter.ai/models?q=anthropic
+export OPENROUTER_API_KEY="<your-key>"                 # openrouter.ai/settings/keys
 export ANTHROPIC_BASE_URL="https://openrouter.ai/api"
-export ANTHROPIC_AUTH_TOKEN="sk-or-v1-your-key"  # openrouter.ai/keys
-export ANTHROPIC_API_KEY=""                       # must be empty
-# Note: OpenRouter Anthropic models need $10 top-up (one-time)
+export ANTHROPIC_AUTH_TOKEN="$OPENROUTER_API_KEY"
+export ANTHROPIC_API_KEY=""                            # must be empty
+# Optional — pin models per role:
+# export ANTHROPIC_DEFAULT_SONNET_MODEL="anthropic/claude-sonnet-4.6"
+# export ANTHROPIC_DEFAULT_HAIKU_MODEL="anthropic/claude-haiku-4.5"
 ```
 
 ### Using Other Tools?

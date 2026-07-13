@@ -96,11 +96,15 @@ Settings → Models → Add Model
 ### Claude Code
 
 ```bash
-# Claude Code 需要 Anthropic 兼容接口 — 使用 OpenRouter
+# Claude Code 通过 OpenRouter 的 Anthropic 兼容接口运行
+# 仅支持付费的 Anthropic Claude 模型 — 浏览: openrouter.ai/models?q=anthropic
+export OPENROUTER_API_KEY="<your-key>"                 # openrouter.ai/settings/keys
 export ANTHROPIC_BASE_URL="https://openrouter.ai/api"
-export ANTHROPIC_AUTH_TOKEN="sk-or-v1-your-key"  # openrouter.ai/keys
-export ANTHROPIC_API_KEY=""                       # 必须为空
-# 注意: OpenRouter 的 Anthropic 模型需充值 $10（一次性）
+export ANTHROPIC_AUTH_TOKEN="$OPENROUTER_API_KEY"
+export ANTHROPIC_API_KEY=""                            # 必须为空
+# 可选 — 按角色指定模型:
+# export ANTHROPIC_DEFAULT_SONNET_MODEL="anthropic/claude-sonnet-4.6"
+# export ANTHROPIC_DEFAULT_HAIKU_MODEL="anthropic/claude-haiku-4.5"
 ```
 
 ### 其他工具？

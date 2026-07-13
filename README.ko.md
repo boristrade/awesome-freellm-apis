@@ -96,11 +96,15 @@ Settings → Models → Add Model
 ### Claude Code
 
 ```bash
-# Claude Code 는 Anthropic 호환 API 필요 — OpenRouter 사용
+# Claude Code 는 OpenRouter 의 Anthropic 호환 API 로 동작
+# 유료 Anthropic Claude 모델만 지원 — 목록: openrouter.ai/models?q=anthropic
+export OPENROUTER_API_KEY="<your-key>"                 # openrouter.ai/settings/keys
 export ANTHROPIC_BASE_URL="https://openrouter.ai/api"
-export ANTHROPIC_AUTH_TOKEN="sk-or-v1-your-key"  # openrouter.ai/keys
-export ANTHROPIC_API_KEY=""                       # 빈 값 필수
-# 참고: OpenRouter Anthropic 모델은 $10 충전 필요 (1회)
+export ANTHROPIC_AUTH_TOKEN="$OPENROUTER_API_KEY"
+export ANTHROPIC_API_KEY=""                            # 빈 값 필수
+# 선택 — 역할별 모델 지정:
+# export ANTHROPIC_DEFAULT_SONNET_MODEL="anthropic/claude-sonnet-4.6"
+# export ANTHROPIC_DEFAULT_HAIKU_MODEL="anthropic/claude-haiku-4.5"
 ```
 
 ### 다른 도구 사용하기
