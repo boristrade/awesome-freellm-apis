@@ -1,72 +1,80 @@
 # Claude Code (cc) — Free LLM API Config
 
-Point Claude Code at any free OpenAI-compatible backend in 30 seconds.
+Run Claude Code on a free backend by pointing it at an **Anthropic-compatible** API.
 
 ## How It Works
 
-Claude Code reads `ANTHROPIC_BASE_URL` and `ANTHROPIC_AUTH_TOKEN` from the environment. When you set them to a free provider, cc routes API calls through that backend instead of Anthropic's paid API.
+Claude Code speaks the **Anthropic Messages API** — it sends requests to
+`${ANTHROPIC_BASE_URL}/v1/messages` in Anthropic's format, not OpenAI's. So the
+backend you point it at has to understand that format. The cleanest free option
+is **OpenRouter**, which exposes a native Anthropic-compatible endpoint.
+
+Claude Code reads three environment variables:
+
+- `ANTHROPIC_BASE_URL` — the Anthropic-compatible host (cc appends `/v1/messages`)
+- `ANTHROPIC_AUTH_TOKEN` — your provider key (sent as the bearer token)
+- `ANTHROPIC_API_KEY` — must be **empty**, or cc prefers it over the auth token
 
 ## Quick Config
 
-### Groq (fastest inference, no credit card)
+### OpenRouter (recommended — native Anthropic endpoint)
 
 ```bash
-export ANTHROPIC_BASE_URL="https://api.groq.com/openai/v1"
-export ANTHROPIC_AUTH_TOKEN="gsk_your_groq_api_key"
-```
-
-Get your key at [console.groq.com/keys](https://console.groq.com/keys). Recommended model: `llama-3.3-70b-versatile`, `qwen-3-32b`.
-
-### NVIDIA NIM (no daily token cap)
-
-```bash
-export ANTHROPIC_BASE_URL="https://integrate.api.nvidia.com/v1"
-export ANTHROPIC_AUTH_TOKEN="nvapi-your_nvidia_key"
-```
-
-Get your key at [build.nvidia.com](https://build.nvidia.com/settings/api-keys). Recommended model: `meta/llama-3.3-70b-instruct`, `deepseek-ai/deepseek-r1`.
-
-### OpenRouter (35+ free models, single key)
-
-```bash
-export ANTHROPIC_BASE_URL="https://openrouter.ai/api/v1"
+export ANTHROPIC_BASE_URL="https://openrouter.ai/api"   # cc appends /v1/messages
 export ANTHROPIC_AUTH_TOKEN="sk-or-v1-your_openrouter_key"
+export ANTHROPIC_API_KEY=""                             # must be empty
 ```
 
-Get your key at [openrouter.ai/keys](https://openrouter.ai/workspaces/default/keys). Recommended model: `openai/gpt-oss-120b:free`, `google/gemini-2.5-flash:free`.
+Get your key at [openrouter.ai/keys](https://openrouter.ai/workspaces/default/keys).
 
-### Cloudflare Workers AI (10K requests/day free)
+Set the model with `ANTHROPIC_MODEL` (and optionally `ANTHROPIC_SMALL_FAST_MODEL`
+for background tasks):
 
 ```bash
-export ANTHROPIC_BASE_URL="https://api.cloudflare.com/client/v4/accounts/YOUR_ACCOUNT_ID/ai/v1"
-export ANTHROPIC_AUTH_TOKEN="your_cloudflare_api_token"
+export ANTHROPIC_MODEL="anthropic/claude-sonnet-4.5"
+export ANTHROPIC_SMALL_FAST_MODEL="anthropic/claude-haiku-4.5"
 ```
 
-### SiliconFlow (best latency for China-based users)
+> **Note:** Running Anthropic models through OpenRouter requires a one-time **$10
+> account top-up** to unlock the higher request tier. Free (`:free`) models on
+> OpenRouter work without a top-up, but Claude Code leans on tool use and long
+> context, so a capable model gives the best results.
 
-```bash
-export ANTHROPIC_BASE_URL="https://api.siliconflow.cn/v1"
-export ANTHROPIC_AUTH_TOKEN="sk-your_siliconflow_key"
-```
+## Using an OpenAI-compatible provider (Groq, NVIDIA, SiliconFlow, …)
 
-Get your key at [cloud.siliconflow.cn](https://cloud.siliconflow.cn/account/ak). Recommended model: `Qwen/Qwen3-Coder-480B-A35B-Instruct`.
+Most free providers in this repo (Groq, NVIDIA NIM, SiliconFlow, Cerebras, etc.)
+only expose an **OpenAI-compatible** endpoint. Claude Code can't talk to those
+directly — the request/response shapes differ. To use them you need a small
+translation proxy that converts between the Anthropic and OpenAI formats:
+
+- [claude-code-router](https://github.com/musistudio/claude-code-router) — purpose-built for this
+- [LiteLLM](https://github.com/BerriAI/litellm) — run it as an Anthropic-compatible proxy
+
+Point `ANTHROPIC_BASE_URL` at the proxy, and the proxy at your free provider's
+OpenAI endpoint (see the [Quick Reference](../README.md#quick-reference--base-urls--api-keys)
+for each provider's base URL and key link).
 
 ## Persistent Config
 
 Add to your shell profile (`~/.zshrc` or `~/.bashrc`):
 
 ```bash
-# Free LLM API backend for Claude Code
-export ANTHROPIC_BASE_URL="https://api.groq.com/openai/v1"
-export ANTHROPIC_AUTH_TOKEN="gsk_your_key_here"
+# Free LLM backend for Claude Code (OpenRouter, Anthropic-compatible)
+export ANTHROPIC_BASE_URL="https://openrouter.ai/api"
+export ANTHROPIC_AUTH_TOKEN="sk-or-v1-your_key_here"
+export ANTHROPIC_API_KEY=""
+export ANTHROPIC_MODEL="anthropic/claude-sonnet-4.5"
 ```
 
 ## Caveats
 
-- Claude Code expects tools/capabilities that not all free backends support. If you hit errors, try a more capable model (Llama 3.3 70B+ or DeepSeek R1).
-- The "Claude" model name shown in cc is cosmetic — you're actually using whichever model you configure.
-- Free tiers have rate limits. Groq: 14,400 RPD. NVIDIA NIM: 40 RPM. OpenRouter: 50 RPD (free tier).
+- Claude Code relies heavily on tool use and large context. Weaker models may fail
+  on agentic tasks — prefer a capable model (Claude Sonnet/Haiku via OpenRouter, or
+  Llama 3.3 70B+ / DeepSeek R1 through a proxy).
+- Leave `ANTHROPIC_API_KEY` empty. If it's set, cc uses it instead of
+  `ANTHROPIC_AUTH_TOKEN` and your provider key is ignored.
+- Free tiers have rate limits. OpenRouter free models: ~50 RPD; with a $10 top-up: 1,000 RPD.
 
 ## More Configs
 
-Visit [freellm.net/config/claude-code/](https://freellm.net/config/claude-code/) for the interactive config generator with all 128+ free models.
+Visit [freellm.net/config/claude-code/](https://freellm.net/config/claude-code/) for the interactive config generator with all free models.
