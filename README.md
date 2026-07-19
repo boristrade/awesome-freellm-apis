@@ -121,6 +121,10 @@ Most AI dev tools accept custom API endpoints — just point them at any provide
 
 More ready-to-copy configs at <a href="https://freellm.net/config/" target="_blank" rel="noopener"><strong>freellm.net/config/</strong></a>.
 
+### Example App — AI Travel Agent
+
+Want to see a full app on a free stack? [`code-examples/ai-travel-agent/`](code-examples/ai-travel-agent/) is a two-agent Streamlit travel planner that runs on any free provider above (Groq, OpenRouter, Mistral, Cerebras, or a custom base URL) plus keyless DuckDuckGo search — one free API key, no credit card.
+
 > **All providers, base URLs, and API key links** are in the [Quick Reference](#quick-reference--base-urls--api-keys) below.
 
 
@@ -343,10 +347,11 @@ Data from freellm.net, updated daily via API monitoring.
 ```
 awesome-free-llm-apis/
 ├── README.md              ← Complete provider directory & code examples
-├── code-examples/          ← Ready-to-use config snippets
+├── code-examples/          ← Ready-to-use config snippets & example apps
 │   ├── claude-code.md
 │   ├── cursor.md
-│   └── codex.md
+│   ├── codex.md
+│   └── ai-travel-agent/    ← Streamlit agent app on a 100% free stack
 └── LICENSE                 ← MIT
 ```
 
